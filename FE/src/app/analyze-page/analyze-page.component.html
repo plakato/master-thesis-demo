@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <ng-container *ngIf="analyze$ | async as analyze; else loading">
+        <div class="row">
+          <div class="col text">
+            <div *ngFor="let line of analyze.lines; let i = index" [class.text-warning]="isHighlighted(i)">
+              {{ i }} {{ line }} {{ analyze.rhymes[i] }}
+            </div>
+          </div>
+          <app-rhymes-matrix
+            [rhymes]="analyze.rhymes"
+            (highlight)="onHighlight($event)"
+            class="col d-block"
+          ></app-rhymes-matrix>
+        </div>
+      </ng-container>
+      <ng-template #loading>Loading...</ng-template>
+    </div>
+  </div>
+</div>

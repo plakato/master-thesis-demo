@@ -1,0 +1,22 @@
+.tile {
+  height: 30px;
+  width: 30px;
+  border: 1px solid #ababab;
+}
+
+.tile.filled {
+  background-color: black;
+}
+
+.tile.filled:hover,
+.tile:hover {
+  background-color: #ffc107 !important;
+}
+
+.header {
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}

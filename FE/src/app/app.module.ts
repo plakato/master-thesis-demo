@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { InputPageComponent } from './input-page/input-page.component';
 import { AnalyzePageComponent } from './analyze-page/analyze-page.component';
 import { RhymesMatrixComponent } from './analyze-page/rhymes-matrix/rhymes-matrix.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { RhymesMatrixComponent } from './analyze-page/rhymes-matrix/rhymes-matri
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

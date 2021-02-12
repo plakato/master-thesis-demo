@@ -1,12 +1,15 @@
 from flask import Flask
 from flask import request
 import random
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'My backend is working!'
 
 @app.route('/rhymes', methods=['POST'])
 def rhymes():

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  python:
+    build: ./
+    volumes: 
+      - ./src:/source/src
+      - ./bin/sparsar/sparsar_man:/source/bin/sparsar_man
+      - ./bin/sparsar/swi-prolog:/usr/lib/swi-prolog
+    command: flask run # /bin/bash -c "while sleep 1000; do :; done"
+    ports: 
+      - "5020:5000"
+    environment: 
+      - FLASK_APP=/source/src/server.py

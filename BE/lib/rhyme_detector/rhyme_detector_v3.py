@@ -258,6 +258,7 @@ class RhymeDetector:
                 # Keep other candidates in case of pronunciation conflict (sorted - descending rating).
                 rhymes[line_idx]['other_candidates'] = sorted(list(filter(lambda c: c != best_rated_rhyme, possible_rhymes)), key=lambda item: item['rating'], reverse=True)
             song_stats = self._revise_and_create_scheme(rhymes, last_stressed_phonemes)
+            song_stats['song_rating'] = self.song_rating(rhymes)
             stats.append(song_stats)
         return stats
 

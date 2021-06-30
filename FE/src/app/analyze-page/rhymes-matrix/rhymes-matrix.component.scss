@@ -5,12 +5,15 @@
 }
 
 .tile.filled {
-  background-color: black;
+  background-color: rgb(70, 70, 70);
 }
 
-.tile.filled:hover,
 .tile:hover {
-  background-color: #ffc107 !important;
+  background-color: #e2e2e2 !important;
+}
+
+.tile.filled:hover {
+  background-color: #000000 !important;
 }
 
 .header {

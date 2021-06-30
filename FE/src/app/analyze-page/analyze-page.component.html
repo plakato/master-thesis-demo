@@ -1,21 +1,30 @@
-<!-- <div class="container">
+<div class="container">
   <div class="row">
     <div class="col">
-      <ng-container *ngIf="analyze$ | async as analyze; else loading">
-        <div class="row">
-          <div class="col text">
-            <div *ngFor="let line of analyze.lines; let i = index" [class.text-warning]="isHighlighted(i)">
-              {{ i }} {{ line }} {{ analyze.rhymes[i] }}
-            </div>
-          </div>
-          <app-rhymes-matrix
-            [rhymes]="analyze.rhymes"
-            (highlight)="onHighlight($event)"
-            class="col d-block"
-          ></app-rhymes-matrix>
+      <div class="row">
+        <div class="col text">
+          <table>
+            <tr
+              *ngFor="let line of analyze.lines; let i = index"
+              (mouseenter)="onMouseEnter(i)"
+              (mouseleave)="onMouseLeave()"
+              [class.same-rhyme-highlight]="isHighlighted(i)"
+              [class.perfect-rhyme-highlight]="analyze.rhymeTypes[i] === 'P'"
+              [class.imperfect-rhyme-highlight]="analyze.rhymeTypes[i] === 'N'"
+            >
+              <td>{{ i }}</td>
+              <td class="px-2">{{ convertSymbolToDash(analyze.scheme[i]) }}</td>
+              <td class="pl-2">{{ line }}</td>
+            </tr>
+          </table>
         </div>
-      </ng-container>
-      <ng-template #loading>Loading...</ng-template>
+        <div class="col">
+          <app-rhymes-matrix [rhymes]="analyze.scheme" (highlight)="onHighlight($event)"></app-rhymes-matrix>
+          <div class="card mt-5 ml-4">
+            <div class="card-body">SONG RATING: {{ analyze.rating }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div> -->
+</div>

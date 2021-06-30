@@ -1,4 +1,24 @@
+$perfect-bg: #dcf1d9;
+$imperfect-bg: #ffdbdb;
 .text {
   line-height: 30px;
   margin-top: 30px;
+  td {
+    padding: 5px 10px;
+  }
+
+  .perfect-rhyme-highlight {
+    background: $perfect-bg;
+  }
+  .imperfect-rhyme-highlight {
+    background: $imperfect-bg;
+  }
+  .same-rhyme-highlight {
+    &.perfect-rhyme-highlight {
+      background: darken($perfect-bg, 10);
+    }
+    &.imperfect-rhyme-highlight {
+      background: darken($imperfect-bg, 10);
+    }
+  }
 }

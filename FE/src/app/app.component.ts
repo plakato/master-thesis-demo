@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StateService } from './services/state.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  public state$ = this.stateService.state$
+  constructor(private stateService: StateService) {}
   title = 'FE';
 }

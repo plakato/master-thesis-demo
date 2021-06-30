@@ -6,12 +6,21 @@ import { environment } from 'src/environments/environment';
 import { ToastService } from './toast.service';
 export type Scheme = (string | Symbol)[];
 
+interface AnalysisConfig {
+  perfect_only?: boolean;
+  // Greater than 0.
+  window?: number;
+  // Between 0 and 1.
+  rhyme_rating_min?: number;
+  // Between 0 and 1.
+  zero_value?: number;
+}
 interface RhymesResponse {
   res: {
     ratings: RhymesResponse__rating[];
     relevant_components: RhymesResponse__component[];
     scheme: Scheme;
-    rating: number;
+    song_rating: number;
   };
 }
 
@@ -34,30 +43,14 @@ export interface State {
   state: 'input' | 'processing' | 'result';
   analyzedText: string;
   result: State__result;
+  analysisConfig: AnalysisConfig;
 }
 
 const initialState: State = {
-  // state: "input",
-  // analyzedText: "",
-  // scheme: null
-  state: 'result',
-  analyzedText:
-    'Roses are red\nviolets are blue\nare you a fed\nor are you true?\nGive me a favor\ndo you have a fever\nThat is it\nBe here on time',
-  result: {
-    scheme: ['a', 'b', 'a', 'b', 'c', 'c', Symbol(), Symbol()],
-    lines: [
-      'Roses are red',
-      'violets are blue',
-      'are you a fed',
-      'or are you true?',
-      'Give me a favor',
-      'do you have a fever',
-      'That is it',
-      'Be here on time'
-    ],
-    rating: 0.2,
-    rhymeTypes: ['P', 'P', 'P', 'P', 'N', 'N', 'X', 'X']
-  }
+  state: 'input',
+  analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
+  analyzedText: '',
+  result: null
 };
 
 @Injectable({
@@ -86,15 +79,16 @@ export class StateService {
     );
   }
 
-  public setAnalyzedText(analyzedText: string) {
+  public submitForAnalysis(analyzedText: string, config: AnalysisConfig) {
     this.updateState((currentState) => ({
       ...currentState,
       state: 'processing',
       analyzedText,
+      analysisConfig: config,
       result: initialState.result
     }));
     return this.http
-      .post<RhymesResponse>(`${environment.api}rhymes`, { text: analyzedText.split('\n') })
+      .post<RhymesResponse>(`${environment.api}rhymes`, { text: analyzedText.split('\n'), ...config })
       .pipe(
         map((x) => x.res),
         map((x) => ({ ...x, scheme: x.scheme.map((elem) => (elem === '-' ? Symbol() : elem)) }))
@@ -105,7 +99,7 @@ export class StateService {
             ...currentState,
             state: 'result',
             result: {
-              rating: res.rating,
+              rating: res.song_rating,
               scheme: res.scheme,
               lines: analyzedText.split('\n'),
               rhymeTypes: this.getRhymeTypes(res)

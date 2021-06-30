@@ -1,4 +1,4 @@
-<div class="container">
+<div class="px-3">
   <div class="row">
     <div class="col">
       <div class="row">
@@ -21,7 +21,7 @@
         <div class="col">
           <app-rhymes-matrix [rhymes]="analyze.scheme" (highlight)="onHighlight($event)"></app-rhymes-matrix>
           <div class="card mt-5 ml-4">
-            <div class="card-body">SONG RATING: {{ analyze.rating }}</div>
+            <div class="card-body">SONG RATING: {{ analyze.rating | number }}</div>
           </div>
         </div>
       </div>

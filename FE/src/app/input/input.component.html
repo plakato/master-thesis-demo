@@ -1,11 +1,37 @@
-
-<div class="row">
-  <div class="col-6">
-    <form [formGroup]="fg" (submit)="onSubmit()">
-      <div class="form-group">
+<form [formGroup]="fg" (submit)="onSubmit()">
+  <div class="row">
+    <div class="col-5 d-flex">
+      <div class="form-group w-100 d-flex">
         <textarea class="form-control" rows="10" formControlName="input"></textarea>
-      </div> 
-      <button class="btn btn-success" [disabled]="!fg.valid">Analyze</button>
-    </form>
+      </div>
+    </div>
+    <div class="col-6" formGroupName="config">
+      <div class="card mb-3" style="max-width: 18rem;">
+        <div class="card-header">Parameters</div>
+        <div class="card-body">
+          <div class="form-group form-check ml-1">
+            <input type="checkbox" id="perfect_only" formControlName="perfect_only" class="form-check-input" />
+            <label for="perfect_only" class="form-check-label">Perfect rhymes only</label>
+          </div>
+          <div class="form-group">
+            <label for="window">Window</label>
+            <input type="number" id="window" formControlName="window" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="rhyme_rating_min">Rhyme threshold</label>
+            <input type="number" id="rhyme_rating_min" formControlName="rhyme_rating_min" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="zero_value">Default for unseen components</label>
+            <input type="number" id="zero_value" formControlName="zero_value" class="form-control" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div> 
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-success" [disabled]="!fg.valid">Analyze</button>
+    </div>
+  </div>
+</form>

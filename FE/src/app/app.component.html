@@ -1,24 +1,22 @@
-
 <ngb-accordion [closeOthers]="true" activeIds="input" #accordion>
-    <ngb-panel id="input" title="Input">
-      <ng-template ngbPanelContent>
-        <app-input></app-input>
-      </ng-template>
-    </ngb-panel>
-    <ngb-panel id="processing" title="Processing" [disabled]="processingDisabled">
-        <ng-template ngbPanelContent>
-        Processing&hellip;
-      <div class="spinner-border" role="status">
-      </div>
+  <ngb-panel id="input" title="Input">
+    <ng-template ngbPanelContent>
+      <app-input></app-input>
     </ng-template>
   </ngb-panel>
-    <ngb-panel id="result" title="Analyze" [disabled]="resultsDisabled">
-      <ng-template ngbPanelContent>
-        <app-analyze-page></app-analyze-page>
-      </ng-template>
-    </ngb-panel>
-  </ngb-accordion>
-  <app-toasts></app-toasts>
-  <pre>
+  <ngb-panel id="processing" title="Processing" [disabled]="processingDisabled">
+    <ng-template ngbPanelContent>
+      Processing&hellip;
+      <div class="spinner-border" role="status"></div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="result" title="Analyze" [disabled]="resultsDisabled">
+    <ng-template ngbPanelContent>
+      <app-analyze-page></app-analyze-page>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+<app-toasts></app-toasts>
+<!-- <pre>
     {{state$|async|json}}
-  </pre>
+  </pre> -->

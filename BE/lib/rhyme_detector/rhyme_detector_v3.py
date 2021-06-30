@@ -9,23 +9,26 @@ import sys
 
 import sklearn
 
-from constants import NO_OF_PRECEDING_LINES
+from constants import NO_OF_PRECEDING_LINES, set_no_of_preceding_lines
 from rhyme_detector_v1 import get_pronunciations_for_n_syllables, next_letter_generator
 
 
 class RhymeDetector:
-    def __init__(self, perfect_only=False, matrix_path=None, verbose=False):
+    def __init__(self, perfect_only=False, matrix_path=None, zero_value=0.001, rhyme_rating_min=0.8, window=3, verbose=False):
         self.data = []
         self.verbose = verbose
         self.separator = '&'
         self.oscilation_check = dict()
+        if window:
+            global NO_OF_PRECEDING_LINES
+            NO_OF_PRECEDING_LINES = window
         # Value assigned when the component is not in the matrix (cooc).
-        self.zero_value = 0.001
+        self.zero_value = zero_value
         # Initialization value for the matrix components at the beginning of training.
         self.init_value = 0.2
         self.perfect_only = perfect_only
         # Minimal rating for a pair of lines to be judged a rhyme.
-        self.rhyme_rating_min = 0.8
+        self.rhyme_rating_min = rhyme_rating_min
         # Default character used
         # - when rating is not available (first line in rhyme group)
         # - when the line doesn't rhyme (in place of scheme letter)

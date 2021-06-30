@@ -15,7 +15,11 @@ def hello_world():
 @app.route('/rhymes', methods=['POST'])
 def rhymes():
     lines = request.json['text']
-    detector_v3 = RhymeDetector(matrix_path='lib/rhyme_detector/data/cooc_iter3.json', verbose=False)
+    config = request.json
+    del config['text']
+    detector_v3 = RhymeDetector(matrix_path='lib/rhyme_detector/data/cooc_iter3.json',
+                                **config,
+                                verbose=False)     
     stats_v3 = detector_v3.analyze_lyrics(lines)
     res = stats_v3
     return {"res": res}

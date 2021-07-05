@@ -1,3 +1,17 @@
 {
-    "python.pythonPath": "/home/patricia/diplomka/master-thesis-demo/BE/venv3.7/bin/python3.7"
+    "python.pythonPath": "/home/patricia/diplomka/master-thesis-demo/BE/venv3.7/bin/python3.7",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#d24a65",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#51cc33",
+        "activityBarBadge.foreground": "#15202b",
+        "titleBar.activeBackground": "#bb2e4a",
+        "titleBar.inactiveBackground": "#bb2e4a99",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveForeground": "#e7e7e799",
+        "statusBar.background": "#bb2e4a",
+        "statusBarItem.hoverBackground": "#d24a65",
+        "statusBar.foreground": "#e7e7e7"
+    }
 }

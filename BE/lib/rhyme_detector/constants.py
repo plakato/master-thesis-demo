@@ -2,12 +2,6 @@ import cmudict
 
 NO_OF_PRECEDING_LINES = 3
 
-
-def set_no_of_preceding_lines(val):
-    global NO_OF_PRECEDING_LINES
-    NO_OF_PRECEDING_LINES = val
-
-
 NOT_AVAILABLE = 'X'
 IPA_VOWELS = {'i', 'y', 'ɨ', 'ʉ', 'ɯ', 'u',
               'ɪ', 'ʏ', 'ɪ̈', 'ʊ̈', 'ʊ',

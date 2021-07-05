@@ -9,7 +9,7 @@ import sys
 
 import sklearn
 
-from constants import NO_OF_PRECEDING_LINES, set_no_of_preceding_lines
+from constants import NO_OF_PRECEDING_LINES
 from rhyme_detector_v1 import get_pronunciations_for_n_syllables, next_letter_generator
 
 
@@ -19,7 +19,8 @@ class RhymeDetector:
         self.verbose = verbose
         self.separator = '&'
         self.oscilation_check = dict()
-        set_no_of_preceding_lines(window)
+        global NO_OF_PRECEDING_LINES
+        NO_OF_PRECEDING_LINES = window
         # Value assigned when the component is not in the matrix (cooc).
         self.zero_value = zero_value
         # Initialization value for the matrix components at the beginning of training.
@@ -211,6 +212,7 @@ class RhymeDetector:
                        'rhyme_fellow': 0,
                        'relevant_components': None,
                        'relevant_components_rhyme_fellow': None,
+                       'stress_moved': False,
                        'other_candidates': []} for i in range(len(song))]
             # Phonemes after last stress for each line (these are only used when no rhyme for the line is found).
             last_stressed_phonemes = [[]]*len(song)

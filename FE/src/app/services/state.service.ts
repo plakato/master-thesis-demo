@@ -59,107 +59,107 @@ export interface State {
 }
 
 const initialState: State = {
-  // state: 'input',
-  // analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
-  // analyzedText: '',
-  // result: null
-  state: 'result',
-  analysisConfig: {
-    window: 3,
-    perfect_only: false,
-    rhyme_rating_min: 0.8,
-    zero_value: 0.001
-  },
-  analyzedText:
-    'dvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnkdvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk',
-  result: {
-    rating: 0,
-    scheme: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e', 'f', 'f', 'g', 'g', 'h', 'h', '-', 'i', 'i'],
-    lines: [
-      'dvlkagvprdf ',
-      'vadfm kl',
-      'vdfonvlm',
-      'adovnlk',
-      'asdcolnk',
-      'dvlkagvprdf ',
-      'vadfm kl',
-      'vdfonvlm',
-      'adovnlk',
-      'asdcolnk',
-      'dvlkagvprdf ',
-      'vadfm kl',
-      'vdfonvlm',
-      'adovnlk',
-      'asdcolnkdvlkagvprdf ',
-      'vadfm kl',
-      'vdfonvlm',
-      'adovnlk',
-      'asdcolnk'
-    ],
-    rhymeTypes: [
-      RhymeType.PM,
-      RhymeType.PM,
-      RhymeType.PF,
-      RhymeType.PF,
-      RhymeType.PD,
-      RhymeType.PD,
-      RhymeType.IM,
-      RhymeType.IM,
-      RhymeType.IM,
-      RhymeType.IM,
-      RhymeType.IM,
-      RhymeType.IM,
-      RhymeType.F,
-      RhymeType.F,
-      RhymeType.F,
-      RhymeType.F,
-      RhymeType.X,
-      RhymeType.F,
-      RhymeType.F
-    ],
-    relevantComponents: [
-      'AA  F ER D',
-      'EH L',
-      'AH  F L AH N',
-      'AA  V AH N K',
-      'AO L K',
-      'AA  F ER D',
-      'EH L',
-      'AH  F L AH N',
-      'AA  V AH N K',
-      'AO L K',
-      'AA  F ER D',
-      'EH L',
-      'AH  F L AH N',
-      'AA  V AH N K',
-      'AO L B R AH NG T F',
-      'EH L',
-      'AH  F L AH N',
-      'AA  V AH N K',
-      'AO L K'
-    ],
-    rhymeRatings: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, '-', 0.9, '-', 0.85, '-', 0.8, '-', 0.95, '-', 0.85, 0, '-', 0.8],
-    stressMoved: [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      true,
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
-    ]
-  }
+  state: 'input',
+  analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
+  analyzedText: '',
+  result: null
+  // state: 'result',
+  // analysisConfig: {
+  //   window: 3,
+  //   perfect_only: false,
+  //   rhyme_rating_min: 0.8,
+  //   zero_value: 0.001
+  // },
+  // analyzedText:
+  //   'dvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnkdvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk',
+  // result: {
+  //   rating: 0,
+  //   scheme: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e', 'f', 'f', 'g', 'g', 'h', 'h', '-', 'i', 'i'],
+  //   lines: [
+  //     'dvlkagvprdf ',
+  //     'vadfm kl',
+  //     'vdfonvlm',
+  //     'adovnlk',
+  //     'asdcolnk',
+  //     'dvlkagvprdf ',
+  //     'vadfm kl',
+  //     'vdfonvlm',
+  //     'adovnlk',
+  //     'asdcolnk',
+  //     'dvlkagvprdf ',
+  //     'vadfm kl',
+  //     'vdfonvlm',
+  //     'adovnlk',
+  //     'asdcolnkdvlkagvprdf ',
+  //     'vadfm kl',
+  //     'vdfonvlm',
+  //     'adovnlk',
+  //     'asdcolnk'
+  //   ],
+  //   rhymeTypes: [
+  //     RhymeType.PM,
+  //     RhymeType.PM,
+  //     RhymeType.PF,
+  //     RhymeType.PF,
+  //     RhymeType.PD,
+  //     RhymeType.PD,
+  //     RhymeType.IM,
+  //     RhymeType.IM,
+  //     RhymeType.IM,
+  //     RhymeType.IM,
+  //     RhymeType.IM,
+  //     RhymeType.IM,
+  //     RhymeType.F,
+  //     RhymeType.F,
+  //     RhymeType.F,
+  //     RhymeType.F,
+  //     RhymeType.X,
+  //     RhymeType.F,
+  //     RhymeType.F
+  //   ],
+  //   relevantComponents: [
+  //     'AA  F ER D',
+  //     'EH L',
+  //     'AH  F L AH N',
+  //     'AA  V AH N K',
+  //     'AO L K',
+  //     'AA  F ER D',
+  //     'EH L',
+  //     'AH  F L AH N',
+  //     'AA  V AH N K',
+  //     'AO L K',
+  //     'AA  F ER D',
+  //     'EH L',
+  //     'AH  F L AH N',
+  //     'AA  V AH N K',
+  //     'AO L B R AH NG T F',
+  //     'EH L',
+  //     'AH  F L AH N',
+  //     'AA  V AH N K',
+  //     'AO L K'
+  //   ],
+  //   rhymeRatings: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, '-', 0.9, '-', 0.85, '-', 0.8, '-', 0.95, '-', 0.85, 0, '-', 0.8],
+  //   stressMoved: [
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     true,
+  //     true,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false
+  //   ]
+  // }
 };
 
 @Injectable({
@@ -233,7 +233,7 @@ export class StateService {
         } else if (res.relevant_components[i].length === 5) {
           types[i] = RhymeType.PF;
           types[i + val.rhyme_fellow] = RhymeType.PF;
-        } else if (res.relevant_components[i].length === 7) {
+        } else if (res.relevant_components[i].length === 8) {
           types[i] = RhymeType.PD;
           types[i + val.rhyme_fellow] = RhymeType.PD;
         }

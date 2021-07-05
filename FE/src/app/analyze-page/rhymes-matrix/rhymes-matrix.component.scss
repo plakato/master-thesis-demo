@@ -9,11 +9,29 @@
 }
 
 .tile:hover {
-  background-color: #e2e2e2 !important;
+  background-color: #e2e2e2;
 }
 
-.tile.filled:hover {
-  background-color: #000000 !important;
+.tile.filled:hover:not(.diagonal) {
+  filter: brightness(0.6);
+}
+
+.tile.diagonal {
+  background: #e6e6e6 !important;
+  &:before {
+    content: '×';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 46px;
+    /* font-weight: 100; */
+    line-height: 46px;
+    color: #c5c5c5;
+  }
+  &:hover {
+    background: #e6e6e6 !important;
+  }
 }
 
 .header {

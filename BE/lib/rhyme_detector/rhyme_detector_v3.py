@@ -19,9 +19,7 @@ class RhymeDetector:
         self.verbose = verbose
         self.separator = '&'
         self.oscilation_check = dict()
-        if window:
-            global NO_OF_PRECEDING_LINES
-            NO_OF_PRECEDING_LINES = window
+        set_no_of_preceding_lines(window)
         # Value assigned when the component is not in the matrix (cooc).
         self.zero_value = zero_value
         # Initialization value for the matrix components at the beginning of training.
@@ -246,7 +244,8 @@ class RhymeDetector:
                                     result = {'rating': rating,
                                               'relevant_components': rel_first,
                                               'relevant_components_rhyme_fellow': rel_second,
-                                              'rhyme_fellow': - lines_back}
+                                              'rhyme_fellow': - lines_back,
+                                              'stress_moved': stress_penalty}
                                     if result not in possible_rhymes:
                                         possible_rhymes.append(result)
                                 # Try truncating the relevant part and look for rhyme only closer to the end.

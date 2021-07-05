@@ -5,7 +5,14 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ToastService } from './toast.service';
 export type Scheme = (string | Symbol)[];
-
+export enum RhymeType {
+  PM = 'perfect masculine',
+  PF = 'perfect feminine',
+  PD = 'perfect dactylic',
+  IM = 'imperfect',
+  F = 'forced',
+  X = 'none'
+}
 interface AnalysisConfig {
   perfect_only?: boolean;
   // Greater than 0.
@@ -16,12 +23,14 @@ interface AnalysisConfig {
   zero_value?: number;
 }
 interface RhymesResponse {
-  res: {
-    ratings: RhymesResponse__rating[];
-    relevant_components: RhymesResponse__component[];
-    scheme: Scheme;
-    song_rating: number;
-  };
+  res: RhymeResponse_res;
+}
+
+interface RhymeResponse_res {
+  ratings: RhymesResponse__rating[];
+  relevant_components: string[][];
+  scheme: Scheme;
+  song_rating: number;
 }
 
 interface RhymesResponse__rating {
@@ -30,14 +39,17 @@ interface RhymesResponse__rating {
   relevant_components: string[];
   relevant_components_rhyme_fellow: string[];
   rhyme_fellow: number;
+  stress_moved: boolean;
 }
 
-interface RhymesResponse__component {}
 export interface State__result {
   scheme: Scheme;
   rating: number;
   lines: string[];
-  rhymeTypes: ('P' | 'N' | 'X')[];
+  rhymeTypes: RhymeType[];
+  rhymeRatings: (number | '-')[];
+  relevantComponents: string[];
+  stressMoved: boolean[];
 }
 export interface State {
   state: 'input' | 'processing' | 'result';
@@ -47,10 +59,107 @@ export interface State {
 }
 
 const initialState: State = {
-  state: 'input',
-  analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
-  analyzedText: '',
-  result: null
+  // state: 'input',
+  // analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
+  // analyzedText: '',
+  // result: null
+  state: 'result',
+  analysisConfig: {
+    window: 3,
+    perfect_only: false,
+    rhyme_rating_min: 0.8,
+    zero_value: 0.001
+  },
+  analyzedText:
+    'dvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk\ndvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnkdvlkagvprdf \nvadfm kl\nvdfonvlm\nadovnlk\nasdcolnk',
+  result: {
+    rating: 0,
+    scheme: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e', 'f', 'f', 'g', 'g', 'h', 'h', '-', 'i', 'i'],
+    lines: [
+      'dvlkagvprdf ',
+      'vadfm kl',
+      'vdfonvlm',
+      'adovnlk',
+      'asdcolnk',
+      'dvlkagvprdf ',
+      'vadfm kl',
+      'vdfonvlm',
+      'adovnlk',
+      'asdcolnk',
+      'dvlkagvprdf ',
+      'vadfm kl',
+      'vdfonvlm',
+      'adovnlk',
+      'asdcolnkdvlkagvprdf ',
+      'vadfm kl',
+      'vdfonvlm',
+      'adovnlk',
+      'asdcolnk'
+    ],
+    rhymeTypes: [
+      RhymeType.PM,
+      RhymeType.PM,
+      RhymeType.PF,
+      RhymeType.PF,
+      RhymeType.PD,
+      RhymeType.PD,
+      RhymeType.IM,
+      RhymeType.IM,
+      RhymeType.IM,
+      RhymeType.IM,
+      RhymeType.IM,
+      RhymeType.IM,
+      RhymeType.F,
+      RhymeType.F,
+      RhymeType.F,
+      RhymeType.F,
+      RhymeType.X,
+      RhymeType.F,
+      RhymeType.F
+    ],
+    relevantComponents: [
+      'AA  F ER D',
+      'EH L',
+      'AH  F L AH N',
+      'AA  V AH N K',
+      'AO L K',
+      'AA  F ER D',
+      'EH L',
+      'AH  F L AH N',
+      'AA  V AH N K',
+      'AO L K',
+      'AA  F ER D',
+      'EH L',
+      'AH  F L AH N',
+      'AA  V AH N K',
+      'AO L B R AH NG T F',
+      'EH L',
+      'AH  F L AH N',
+      'AA  V AH N K',
+      'AO L K'
+    ],
+    rhymeRatings: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, '-', 0.9, '-', 0.85, '-', 0.8, '-', 0.95, '-', 0.85, 0, '-', 0.8],
+    stressMoved: [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  }
 };
 
 @Injectable({
@@ -102,7 +211,10 @@ export class StateService {
               rating: res.song_rating,
               scheme: res.scheme,
               lines: analyzedText.split('\n'),
-              rhymeTypes: this.getRhymeTypes(res)
+              rhymeTypes: this.getRhymeTypes(res),
+              relevantComponents: res.relevant_components.map((x) => x.join(' ')),
+              rhymeRatings: res.ratings.map((x) => x.rating),
+              stressMoved: res.ratings.map((x) => x.stress_moved)
             }
           })),
         (err) => {
@@ -111,18 +223,35 @@ export class StateService {
         }
       );
   }
-  getRhymeTypes(res: { ratings: RhymesResponse__rating[]; scheme: Scheme }): ('P' | 'N' | 'X')[] {
-    const ret = new Array(res.scheme.length).fill('X');
-    res.ratings.forEach((val, idx) => {
-      if (val.rating != 0) ret[idx] = 'N';
-    });
-    res.ratings.forEach((val, idx) => {
+  getRhymeTypes(res: RhymeResponse_res): RhymeType[] {
+    const types: RhymeType[] = new Array(res.scheme.length).fill(RhymeType.X);
+    res.ratings.forEach((val, i) => {
       if (val.rating === 1) {
-        ret[idx] = 'P';
-        ret[idx + val.rhyme_fellow] = 'P';
+        if (res.relevant_components[i].length === 2) {
+          types[i] = RhymeType.PM;
+          types[i + val.rhyme_fellow] = RhymeType.PM;
+        } else if (res.relevant_components[i].length === 5) {
+          types[i] = RhymeType.PF;
+          types[i + val.rhyme_fellow] = RhymeType.PF;
+        } else if (res.relevant_components[i].length === 7) {
+          types[i] = RhymeType.PD;
+          types[i + val.rhyme_fellow] = RhymeType.PD;
+        }
+      } else if (val.rating !== 0) {
+        const rel_comp_fel = res.relevant_components[i + val.rhyme_fellow];
+        if (
+          rel_comp_fel.length === res.relevant_components[i].length &&
+          res.relevant_components[i].every((v, j) => rel_comp_fel[j] === v)
+        ) {
+          types[i] = RhymeType.IM;
+          types[i + val.rhyme_fellow] = RhymeType.IM;
+        } else {
+          types[i] = RhymeType.F;
+          types[i + val.rhyme_fellow] = RhymeType.F;
+        }
       }
     });
-    return ret;
+    return types;
   }
 
   private updateState(f: (currentState: State) => State) {

@@ -7,18 +7,7 @@ $imperfect-bg: #ffdbdb;
     padding: 5px 10px;
   }
 
-  .perfect-rhyme-highlight {
-    background: $perfect-bg;
-  }
-  .imperfect-rhyme-highlight {
-    background: $imperfect-bg;
-  }
-  .same-rhyme-highlight {
-    &.perfect-rhyme-highlight {
-      background: darken($perfect-bg, 10);
-    }
-    &.imperfect-rhyme-highlight {
-      background: darken($imperfect-bg, 10);
-    }
+  tr.highlight {
+    filter: brightness(0.85);
   }
 }

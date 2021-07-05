@@ -8,9 +8,8 @@
               *ngFor="let line of analyze.lines; let i = index"
               (mouseenter)="onMouseEnter(i)"
               (mouseleave)="onMouseLeave()"
-              [class.same-rhyme-highlight]="isHighlighted(i)"
-              [class.perfect-rhyme-highlight]="analyze.rhymeTypes[i] === 'P'"
-              [class.imperfect-rhyme-highlight]="analyze.rhymeTypes[i] === 'N'"
+              [class.highlight]="isHighlighted(i)"
+              [style.background-color]="getColor(i)"
             >
               <td>{{ i }}</td>
               <td class="px-2">{{ convertSymbolToDash(analyze.scheme[i]) }}</td>
@@ -19,9 +18,23 @@
           </table>
         </div>
         <div class="col">
-          <app-rhymes-matrix [rhymes]="analyze.scheme" (highlight)="onHighlight($event)"></app-rhymes-matrix>
+          <app-rhymes-matrix
+            [rhymes]="analyze.scheme"
+            [rhymeRatings]="analyze.rhymeRatings"
+            [rhymeTypes]="analyze.rhymeTypes"
+            [components]="analyze.relevantComponents"
+            [stressMoved]="analyze.stressMoved"
+            (highlight)="onHighlight($event)"
+          ></app-rhymes-matrix>
           <div class="card mt-5 ml-4">
-            <div class="card-body">SONG RATING: {{ analyze.rating | number }}</div>
+            <div class="card-body">
+              SONG RHYME RATING: {{ analyze.rating | number }}<br /><br />
+              Perfect masculine: {{ getPercentage(RhymeType.PM) | number }}%<br />
+              Perfect Feminine: {{ getPercentage(RhymeType.PF) | number }}%<br />
+              Perfect Dactylic: {{ getPercentage(RhymeType.PD) | number }}%<br />
+              Imperfect: {{ getPercentage(RhymeType.IM) | number }}%<br />
+              Forced: {{ getPercentage(RhymeType.F) | number }}%<br />
+            </div>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
       <app-input></app-input>
     </ng-template>
   </ngb-panel>
-  <ngb-panel id="processing" title="Processing" [disabled]="processingDisabled">
+  <ngb-panel id="processing" *ngIf="!processingDisabled">
     <ng-template ngbPanelContent>
       Processing&hellip;
       <div class="spinner-border" role="status"></div>
@@ -17,6 +17,7 @@
   </ngb-panel>
 </ngb-accordion>
 <app-toasts></app-toasts>
-<!-- <pre>
-    {{state$|async|json}}
-  </pre> -->
+<pre>
+    {{ state$ | async | json }}
+  </pre
+>

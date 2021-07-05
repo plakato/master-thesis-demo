@@ -5,11 +5,26 @@
   </div>
   <div *ngFor="let line of rhymes; let i = index" class="d-flex">
     <div class="header">{{ i }}</div>
-    <div
-      *ngFor="let column of rhymes; let j = index"
-      class="tile"
-      [class.filled]="line === column"
-      (mouseenter)="highlight.emit(line === column ? [i, j] : [])"
-    ></div>
+    <ng-container *ngFor="let column of rhymes; let j = index">
+      <div
+        *ngIf="i === j || line !== column"
+        class="tile"
+        [style.background-color]="getColor(i, j)"
+        [class.diagonal]="i === j"
+        (mouseenter)="highlight.emit(line === column && i !== j ? [i, j] : [])"
+      ></div>
+      <div
+        *ngIf="i !== j && line === column"
+        class="tile"
+        [style.background-color]="getColor(i, j)"
+        [class.filled]="line === column"
+        (mouseenter)="highlight.emit(line === column && i !== j ? [i, j] : [])"
+        [ngbPopover]="popoverText"
+        triggers="mouseenter:mouseleave"
+        popoverTitle="Rhyme details"
+        placement="bottom"
+      ></div>
+      <ng-template #popoverText><div [innerHTML]="getPopoverText(i, j)"></div></ng-template>
+    </ng-container>
   </div>
 </div>

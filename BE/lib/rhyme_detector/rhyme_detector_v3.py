@@ -232,7 +232,7 @@ class RhymeDetector:
                     # Look for rhyme fellow in preceding lines.
                     lines_back = 0
                     lines_evaluated = 0
-                    while lines_evaluated < NO_OF_PRECEDING_LINES and line_idx - lines_back >= 0:
+                    while lines_evaluated < NO_OF_PRECEDING_LINES and line_idx - lines_back > 0:
                         lines_back += 1
                         if not song[line_idx-lines_back]:
                             lines_evaluated += 1
@@ -299,7 +299,7 @@ class RhymeDetector:
                     # Keep the pronunciation used for the rhyme.
                     relevant_parts[i] = rhymes[i]['relevant_components']
                     break
-        revised_groups = self.solve_exceptions_in_rhymes(rhyme_groups, rhymes)
+        revised_groups, rhymes = self.solve_exceptions_in_rhymes(rhyme_groups, rhymes)
         scheme = self.assign_scheme_letters(rhymes, revised_groups)
         stats = {'scheme': scheme, 'ratings': rhymes, 'relevant_components': relevant_parts}
         return stats
@@ -341,7 +341,7 @@ class RhymeDetector:
                         break
             if not removed:
                 revised_groups.append(group)
-        return revised_groups
+        return revised_groups, rhymes
 
     def _get_new_groups(self, group, rhymes):
         group.sort()

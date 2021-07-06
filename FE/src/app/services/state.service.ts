@@ -239,7 +239,9 @@ export class StateService {
         }
       } else if (val.rating !== 0) {
         const rel_comp_fel = res.relevant_components[i + val.rhyme_fellow];
-        if (
+        if (rel_comp_fel.length === 0) {
+          types[i] = RhymeType.X;
+        } else if (
           rel_comp_fel.length === res.relevant_components[i].length &&
           res.relevant_components[i].every((v, j) => rel_comp_fel[j] === v)
         ) {

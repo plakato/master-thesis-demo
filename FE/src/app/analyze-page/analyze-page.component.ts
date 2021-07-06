@@ -18,7 +18,7 @@ export function getColor(
     const rhymeType = rhymeTypes[i];
     let rating = rhymeRatings[Math.max(i, j)] as number;
 
-    rating = (rating - min) / (max - min);
+    rating = max === min ? max : (rating - min) / (max - min);
     const scale = rating === 0 ? 0 : rating * 0.9 + 0.05;
     switch (rhymeType) {
       case RhymeType.PM:
@@ -37,7 +37,7 @@ export function getColor(
         color = [0x27, 0x7d, 0xa1];
         break;
       default:
-        color = [0, 0, 0];
+        color = [255, 255, 255];
     }
     color = color.map((c) => (c = 255 - c)).map((c) => 255 - scale * c) as [number, number, number];
   } else {

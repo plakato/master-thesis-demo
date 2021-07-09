@@ -60,7 +60,7 @@ export interface State {
 
 const initialState: State = {
   state: 'input',
-  analysisConfig: { window: 3, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
+  analysisConfig: { window: 5, perfect_only: false, rhyme_rating_min: 0.8, zero_value: 0.001 },
   analyzedText: '',
   result: null
   // state: 'result',

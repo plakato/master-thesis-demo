@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ToastService } from './toast.service';
@@ -47,6 +47,7 @@ export interface State__result {
   rating: number;
   lines: string[];
   rhymeTypes: RhymeType[];
+  rhymeTypesMatrix: RhymeType[][];
   rhymeRatings: (number | '-')[];
   relevantComponents: string[];
   stressMoved: boolean[];
@@ -200,7 +201,8 @@ export class StateService {
       .post<RhymesResponse>(`${environment.api}rhymes`, { text: analyzedText.split('\n'), ...config })
       .pipe(
         map((x) => x.res),
-        map((x) => ({ ...x, scheme: x.scheme.map((elem) => (elem === '-' ? Symbol() : elem)) }))
+        map((x) => ({ ...x, scheme: x.scheme.map((elem) => (elem === '-' ? Symbol() : elem)) })),
+        tap((x) => console.log(x))
       )
       .subscribe(
         (res) =>
@@ -212,6 +214,7 @@ export class StateService {
               scheme: res.scheme,
               lines: analyzedText.split('\n'),
               rhymeTypes: this.getRhymeTypes(res),
+              rhymeTypesMatrix: this.getRhymeTypesMatrix(res, config.window),
               relevantComponents: res.relevant_components.map((x) => x.join(' ')),
               rhymeRatings: res.ratings.map((x) => x.rating),
               stressMoved: res.ratings.map((x) => x.stress_moved)
@@ -233,7 +236,7 @@ export class StateService {
         } else if (res.relevant_components[i].length === 5) {
           types[i] = RhymeType.PF;
           types[i + val.rhyme_fellow] = RhymeType.PF;
-        } else if (res.relevant_components[i].length === 8) {
+        } else if ([8, 11].includes(res.relevant_components[i].length)) {
           types[i] = RhymeType.PD;
           types[i + val.rhyme_fellow] = RhymeType.PD;
         }
@@ -254,6 +257,74 @@ export class StateService {
       }
     });
     return types;
+  }
+
+  getRhymeTypesMatrix(res: RhymeResponse_res, window: number): RhymeType[][] {
+    let types: RhymeType[][] = new Array(res.scheme.length).fill(0);
+    types = types.map((t) => new Array(res.scheme.length).fill(RhymeType.X));
+    for (let i = 0; i < types.length; i++) {
+      for (let j = i; j < Math.min(types.length, i + window + 1); j++) {
+        let rt = RhymeType.X;
+        if (i == j + res.ratings[j].rhyme_fellow) {
+          rt = this.getDominantRhymeType(res, j);
+        } else {
+          let stressMoved = res.ratings[i].stress_moved || res.ratings[j].stress_moved ? true : false;
+          let iRelComp = res.relevant_components[i];
+          let jRelComp = res.relevant_components[j];
+          if (iRelComp.length !== jRelComp.length) {
+            stressMoved = true;
+            let l = Math.min(iRelComp.length, jRelComp.length);
+            iRelComp = iRelComp.slice(iRelComp.length - l);
+            jRelComp = jRelComp.slice(jRelComp.length - l);
+          }
+          if (iRelComp.every((v, idx) => jRelComp[idx] === v) && iRelComp !== null) {
+            if (stressMoved) {
+              rt = RhymeType.IM;
+            } else {
+              if (iRelComp.length == 2) {
+                rt = RhymeType.PM;
+              } else if (iRelComp.length == 5) {
+                rt = RhymeType.PF;
+              } else if ([8, 11].includes(iRelComp.length)) {
+                rt = RhymeType.PD;
+              }
+            }
+          } else if (res.scheme[i] === res.scheme[j]) {
+            rt = RhymeType.F;
+          }
+        }
+        types[i][j] = rt;
+        types[j][i] = rt;
+      }
+    }
+    return types;
+  }
+
+  private getDominantRhymeType(res: RhymeResponse_res, j: number): RhymeType {
+    let val = res.ratings[j];
+    let rt = null;
+    if (val.rating === 1) {
+      if (res.relevant_components[j].length === 2) {
+        rt = RhymeType.PM;
+      } else if (res.relevant_components[j].length === 5) {
+        rt = RhymeType.PF;
+      } else if ([8, 11].includes(res.relevant_components[j].length)) {
+        rt = RhymeType.PD;
+      }
+    } else if (val.rating !== 0) {
+      const rel_comp_fel = res.relevant_components[j + val.rhyme_fellow];
+      if (rel_comp_fel.length === 0) {
+        rt = RhymeType.X;
+      } else if (
+        rel_comp_fel.length === res.relevant_components[j].length &&
+        res.relevant_components[j].every((v, j) => rel_comp_fel[j] === v)
+      ) {
+        rt = RhymeType.IM;
+      } else {
+        rt = RhymeType.F;
+      }
+    }
+    return rt;
   }
 
   private updateState(f: (currentState: State) => State) {

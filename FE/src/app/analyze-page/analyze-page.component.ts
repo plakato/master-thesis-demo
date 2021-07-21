@@ -6,7 +6,7 @@ import { StateService, Scheme, State__result, RhymeType } from '../services/stat
 export function getColor(
   rhymeRatings: (number | '-')[],
   scheme: string[],
-  rhymeTypes: RhymeType[],
+  rhymeType: RhymeType,
   i: number,
   j: number
 ): string {
@@ -15,7 +15,6 @@ export function getColor(
   const min = ratings.reduce((it, cur) => Math.min(it, cur), ratings[0]) || 0;
   const max = ratings.reduce((it, cur) => Math.max(it, cur), ratings[0]) || 1;
   if (scheme[i] === scheme[j]) {
-    const rhymeType = rhymeTypes[i];
     let rating = rhymeRatings[Math.max(i, j)] as number;
 
     rating = max === min ? max : (rating - min) / (max - min);
@@ -39,7 +38,7 @@ export function getColor(
       default:
         color = [255, 255, 255];
     }
-    color = color.map((c) => (c = 255 - c)).map((c) => 255 - scale * c) as [number, number, number];
+    // color = color.map((c) => (c = 255 - c)).map((c) => 255 - scale * c) as [number, number, number];
   } else {
     return null;
   }
@@ -87,7 +86,7 @@ export class AnalyzePageComponent {
 
   public getColor(i: number) {
     const j = this.analyze.scheme.lastIndexOf(this.analyze.scheme[i]);
-    return getColor(this.analyze.rhymeRatings, this.analyze.scheme as string[], this.analyze.rhymeTypes, i, j);
+    return getColor(this.analyze.rhymeRatings, this.analyze.scheme as string[], this.analyze.rhymeTypes[i], i, j);
   }
 
   public getPercentage(rt: RhymeType): number {

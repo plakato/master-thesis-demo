@@ -11,6 +11,7 @@ import { first } from 'rxjs/operators';
 })
 export class RhymesMatrixComponent implements OnInit {
   @Input() rhymes: string[];
+  @Input() rhymeTypesMatrix: RhymeType[][];
   @Input() rhymeTypes: RhymeType[];
   @Input() rhymeRatings: (number | '-')[];
   @Input() components: string[];
@@ -19,17 +20,19 @@ export class RhymesMatrixComponent implements OnInit {
   constructor() {}
 
   public getColor(i: number, j: number) {
-    return getColor(this.rhymeRatings, this.rhymes, this.rhymeTypes, i, j);
+    return getColor(this.rhymeRatings, this.rhymes, this.rhymeTypesMatrix[i][j], i, j);
   }
   public getPopoverText(i: number, j: number) {
     const first = Math.min(i, j);
     const second = Math.max(i, j);
     const text =
-      `Type: ${this.rhymeTypes[i]}<br/>` +
+      `Type: ${this.rhymeTypesMatrix[i][j]}<br/>` +
       `Rhyming phonemes 1st: ${this.components[first]}<br/>` +
       `Rhyming phonemes 2nd: ${this.components[second]}<br/>` +
       `Stress moved: ${this.stressMoved[second]} <br/>` +
-      `Rhyme rating: ${this.rhymeRatings[second]}<br />`;
+      `Rhyme rating: ${
+        this.rhymeTypes[second] === this.rhymeTypesMatrix[i][j] ? this.rhymeRatings[second] : 'N/A'
+      }<br />`;
     return text;
   }
   ngOnInit(): void {}
